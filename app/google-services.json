@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "439417389317",
+    "project_id": "cs-160-project",
+    "storage_bucket": "cs-160-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439417389317:android:f616adc6292f7c736b776c",
+        "android_client_info": {
+          "package_name": "edu.sjsu.android.cs_160_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439417389317-hhtaddi452o39h0e5nc7nihrgs9lvu1r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1Fgb8XgYaHwVk-5zV7xAh0aoCYYa8nAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439417389317-hhtaddi452o39h0e5nc7nihrgs9lvu1r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
