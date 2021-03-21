@@ -1,4 +1,4 @@
-package com.example.signuppage;
+package edu.sjsu.android.cs_160_project;
 
 import org.junit.Test;
 
