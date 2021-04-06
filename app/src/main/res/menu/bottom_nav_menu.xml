@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Menu" android:icon="@drawable/ic_restaurant_menu" android:id="@+id/menu"/>
+    <item android:title="Find Restaurant" android:icon="@drawable/ic__location_searching" android:id="@+id/find_restaurant_page"/>
+    <item android:title="Orders" android:icon="@drawable/ic__menu" android:id="@+id/order_page"/>
+</menu>

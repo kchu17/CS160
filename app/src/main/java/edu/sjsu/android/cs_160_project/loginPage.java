@@ -61,6 +61,8 @@ public class loginPage extends AppCompatActivity {
                 {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
+                    Intent intent = new Intent(loginPage.this, MainActivity.class);
+                    startActivity(intent);
 
                 }
                 else
