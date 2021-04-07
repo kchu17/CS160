@@ -19,6 +19,9 @@ import edu.sjsu.android.cs_160_project.databinding.ActivityLoginPageBinding;
 
 public class loginPage extends AppCompatActivity {
 
+    public static final String EXTRA = "edu.sjsu.android.cs_160_project.extra";
+    public static final String EXTRA_EMAIL = "edu.sjsu.android.cs_160_project.email";
+
     private ActivityLoginPageBinding binding;
     private EditText passwordInput;
     private EditText emailInput;
@@ -61,6 +64,8 @@ public class loginPage extends AppCompatActivity {
                 {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
+                    Intent intent = new Intent(loginPage.this, MainActivity.class);
+                    startActivity(intent);
 
                 }
                 else
@@ -70,5 +75,17 @@ public class loginPage extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void password_reset(View view) {
+
+        String email = emailInput.getText().toString();
+
+        Bundle extras = new Bundle();
+        extras.putString(EXTRA_EMAIL, email);
+
+        Intent intent = new Intent(this, PasswordReset.class);
+        intent.putExtra(EXTRA, extras);
+        startActivity(intent);
     }
 }
