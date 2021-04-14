@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_nav"
-    app:startDestination="@id/menu">
+    app:startDestination="@id/restaurant_menu">
 
     <fragment
         android:id="@+id/menu"
@@ -20,4 +20,9 @@
         android:name="edu.sjsu.android.cs_160_project.order_page"
         android:label="fragment_order_page"
         tools:layout="@layout/fragment_order_page" />
+    <fragment
+        android:id="@+id/restaurant_menu"
+        android:name="edu.sjsu.android.cs_160_project.restaurant_menu"
+        android:label="fragment_restaurant_menu"
+        tools:layout="@layout/fragment_restaurant_menu" />
 </navigation>
