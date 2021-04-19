@@ -7,6 +7,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,5 +42,6 @@ public class MainActivity extends AppCompatActivity {
         user.put("born", "2006");
 
         db.collection("users").add(user);
+
     }
 }

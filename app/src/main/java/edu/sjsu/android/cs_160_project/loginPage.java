@@ -14,6 +14,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1.WriteResult;
+
+import java.util.ArrayList;
 
 import edu.sjsu.android.cs_160_project.databinding.ActivityLoginPageBinding;
 
@@ -27,6 +32,7 @@ public class loginPage extends AppCompatActivity {
     private EditText emailInput;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,29 @@ public class loginPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+        // delete this later
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        ArrayList<MenuEntry> menu = new ArrayList<>();
+        menu.add(new MenuEntry("Regular Burrito", "beans, fries, and chipts", 10.99, "https://hdlsd"));
+        Restaurant restaurant = new Restaurant("Taqueria Los Gallos", "Mexican Food, Burritos, Tacos",4.9, 4, menu);
+
+
+        db.collection("restaurants").add(restaurant);
+
+
+
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) // Checking to see if the user is currently logged in
+        {
+            Intent intent = new Intent(loginPage.this, MainActivity.class);
+            // UNCOMMENT THIS startActivity(intent);
+        }
     }
 
     public void register_user(View view) {
@@ -65,7 +94,7 @@ public class loginPage extends AppCompatActivity {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
                     Intent intent = new Intent(loginPage.this, MainActivity.class);
-                    startActivity(intent);
+                    // UNCOMMENT THIS startActivity(intent);
 
                 }
                 else
