@@ -7,6 +7,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,18 +29,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         navController = Navigation.findNavController(this, R.id.fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        test_database();
-    }
 
-    public void test_database()
-    {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String, String> user = new HashMap<>();
-        user.put("first_name", "kuk");
-        user.put("last_name", "ore");
-        user.put("born", "2006");
-
-        db.collection("users").add(user);
     }
 }
