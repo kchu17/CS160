@@ -14,6 +14,10 @@ public class MenuEntry {
         this.price = price;
         this.image_url = image_url;
     }
+    public MenuEntry()
+    {
+
+    }
 
     public String getImage_url() {
         return image_url;

@@ -4,19 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firestore.v1.WriteResult;
+import com.google.type.LatLng;
 
 import java.util.ArrayList;
 
@@ -48,19 +57,10 @@ public class loginPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        // delete this later
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        ArrayList<MenuEntry> menu = new ArrayList<>();
-        menu.add(new MenuEntry("Regular Burrito", "beans, fries, and chipts", 10.99, "https://hdlsd"));
-        Restaurant restaurant = new Restaurant("Taqueria Los Gallos", "Mexican Food, Burritos, Tacos",4.9, 4, menu);
-
-
-        db.collection("restaurants").add(restaurant);
-
-
-
-
     }
+
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -69,7 +69,7 @@ public class loginPage extends AppCompatActivity {
         if(currentUser != null) // Checking to see if the user is currently logged in
         {
             Intent intent = new Intent(loginPage.this, MainActivity.class);
-            // UNCOMMENT THIS startActivity(intent);
+            startActivity(intent);
         }
     }
 
@@ -94,7 +94,7 @@ public class loginPage extends AppCompatActivity {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
                     Intent intent = new Intent(loginPage.this, MainActivity.class);
-                    // UNCOMMENT THIS startActivity(intent);
+                    startActivity(intent);
 
                 }
                 else

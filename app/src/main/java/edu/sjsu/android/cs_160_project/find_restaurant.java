@@ -1,8 +1,10 @@
 package edu.sjsu.android.cs_160_project;
 
 import android.app.Dialog;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,7 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -21,7 +35,7 @@ import java.util.ArrayList;
  * Use the {@link find_restaurant#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class find_restaurant extends Fragment implements FindRestaurantsAdapter.OnRowListener {
+public class find_restaurant extends Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,9 +46,11 @@ public class find_restaurant extends Fragment implements FindRestaurantsAdapter.
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
+    private FirebaseFirestore db;
 
     // dialog
 
+    private FirestoreRecyclerAdapter adapter;
 
     public find_restaurant() {
         // Required empty public constructor
@@ -67,6 +83,10 @@ public class find_restaurant extends Fragment implements FindRestaurantsAdapter.
         }
     }
 
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -74,35 +94,61 @@ public class find_restaurant extends Fragment implements FindRestaurantsAdapter.
 
         ArrayList<Restaurant> input = new ArrayList<>();
 
-
-        /*
-        input.add(new Restaurant("Taqueria los Gallos", "Mexican Food, Burritos, Tacos", 4.9, R.drawable.taqueria_los_gallos));
-        input.add(new Restaurant("Creamery N Joy", "Ice Cream, Shakes, Cookies", 4.7, R.drawable.ice_cream_restaurant));
-        input.add(new Restaurant("Toki", "Asian Food, Sushi", 4.8, R.drawable.sushi_restaurant));;
-        input.add(new Restaurant("Nations", "American Classics, Burger, Hot Dogs", 4.7, R.drawable.burger_restaurant));
-        input.add(new Restaurant("Milk Tea Lab", "Boba, Tea, Shakes", 4.9, R.drawable.boba_restaurant));*/
-
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_find_restaurant, container, false);
+
+        db = FirebaseFirestore.getInstance(); // getting database
+        Query query = db.collection("restaurants"); // preparing query to get information from database
         recyclerView = view.findViewById(R.id.Myrecycler);
+
+        // Recycler Options
+        FirestoreRecyclerOptions<Restaurant> options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(query, Restaurant.class).build();
+
+        // Creating Recycler Adapter
+         adapter = new FirestoreRecyclerAdapter<Restaurant, RestaurantViewHolder>(options) {
+            @NonNull
+            @Override
+            public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = inflater.from(parent.getContext()) .inflate(R.layout.find_restaurant, parent, false);
+                return new RestaurantViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position, @NonNull Restaurant model) {
+
+                holder.restaurantName.setText(model.getRestaurantName());
+                holder.restaurantType.setText(model.getType());
+                holder.restaurantRating.setText(Double.toString(model.getRating()));
+
+
+                Glide.with(getContext()).load(Uri.parse(model.getImageUri())).into(holder.restaurantImage);
+
+            }
+        };
+
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        RecyclerView.Adapter<FindRestaurantsAdapter.ViewHolder> mAdapter = new FindRestaurantsAdapter(input, this);
-        recyclerView.setAdapter(mAdapter);
-
-
-
-
-
-
-
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening(); // will listen for any new files added.
+    }
+
+
+    // TODO: will be used later
+    /*
     @Override
     public void onRowClick(int position) {
         Toast.makeText(getActivity(), "You clicked row #" + Integer.toString(position), Toast.LENGTH_SHORT).show();
@@ -133,5 +179,38 @@ public class find_restaurant extends Fragment implements FindRestaurantsAdapter.
 
         dialog.setContentView(custom_dialog);
         dialog.show();
+    }
+
+*/
+    private class RestaurantViewHolder extends RecyclerView.ViewHolder  {
+
+        private TextView restaurantName;
+        private TextView restaurantRating;
+        private TextView restaurantType;
+        private ImageView restaurantImage;
+        public RestaurantViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            restaurantName = itemView.findViewById(R.id.restaurantName);
+            restaurantRating = itemView.findViewById(R.id.restaurantRating);
+            restaurantType = itemView.findViewById(R.id.restaurantType);
+            restaurantImage = itemView.findViewById(R.id.restaurantImage);
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION)
+                    {
+                        Toast.makeText(getActivity(), "Clicked row # " + getAdapterPosition() , Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
+
+
     }
 }

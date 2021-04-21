@@ -2,6 +2,11 @@ package edu.sjsu.android.cs_160_project;
 
 
 
+import android.net.Uri;
+import android.widget.ImageView;
+
+import com.google.type.LatLng;
+
 import java.util.ArrayList;
 
 public class Restaurant {
@@ -9,17 +14,33 @@ public class Restaurant {
     private String restaurantName;
     private double rating;
     private String type;
-    private int image;
+    private String imageUri;
+    private LatLng latLng;
+
     ArrayList<MenuEntry> menu;
 
-    public Restaurant(String input_name, String input_type, double input_rating, int input_image, ArrayList<MenuEntry> input_menu)
+    public Restaurant(String input_name, String input_type, double input_rating, String input_imageUri,  ArrayList<MenuEntry> input_menu)
     {
         restaurantName = input_name;
         type = input_type;
         rating = input_rating;
-        image = input_image;
+        imageUri = input_imageUri;
         menu = input_menu;
     }
+
+    public Restaurant() // for firebase
+    {
+
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
 
     public ArrayList<MenuEntry> getMenu() {
         return menu;
@@ -29,12 +50,12 @@ public class Restaurant {
         this.menu = menu;
     }
 
-    public int getImage() {
-        return image;
+    public String getImageUri() {
+        return imageUri;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public String getRestaurantName() {
@@ -60,4 +81,9 @@ public class Restaurant {
     public void setType(String type) {
         this.type = type;
     }
+    /*
+    public ImageView getImageView()
+    {
+
+    }*/
 }
