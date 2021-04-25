@@ -3,18 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_nav"
-    app:startDestination="@id/menu">
+    app:startDestination="@id/restaurant_menu">
 
-    <fragment
-        android:id="@+id/menu"
-        android:name="edu.sjsu.android.cs_160_project.menu"
-        android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" />
-    <fragment
-        android:id="@+id/find_restaurant_page"
-        android:name="edu.sjsu.android.cs_160_project.find_restaurant"
-        android:label="fragment_find_restaurant"
-        tools:layout="@layout/fragment_find_restaurant" />
     <fragment
         android:id="@+id/order_page"
         android:name="edu.sjsu.android.cs_160_project.order_page"

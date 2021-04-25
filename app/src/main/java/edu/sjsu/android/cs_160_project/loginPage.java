@@ -68,8 +68,14 @@ public class loginPage extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) // Checking to see if the user is currently logged in
         {
-            Intent intent = new Intent(loginPage.this, MainActivity.class);
-            startActivity(intent);
+            if (currentUser.getEmail() == "test123@gmail.com") {
+                Intent intentRestaurant = new Intent(loginPage.this, MainRestaurant.class);
+                startActivity(intentRestaurant);
+            }
+            else {
+                Intent intent = new Intent(loginPage.this, MainActivity.class);
+                startActivity(intent);
+            }
         }
     }
 
@@ -93,8 +99,15 @@ public class loginPage extends AppCompatActivity {
                 {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
-                    Intent intent = new Intent(loginPage.this, MainActivity.class);
-                    startActivity(intent);
+
+                    if (email == "test123@gmail.com") {
+                        Intent intentRestaurant = new Intent(loginPage.this, MainRestaurant.class);
+                        startActivity(intentRestaurant);
+                    }
+                    else {
+                        Intent intent = new Intent(loginPage.this, MainActivity.class);
+                        startActivity(intent);
+                    }
 
                 }
                 else
