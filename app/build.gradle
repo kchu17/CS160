@@ -1,7 +1,12 @@
+
+
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id "androidx.navigation.safeargs"
+
 }
+
 
 android {
     compileSdkVersion 30
@@ -55,4 +60,8 @@ dependencies {
     // FirebaseUI for Cloud Firestore and Firebase storage
     implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:6.4.0'
+
+
+    // Google Places
+    implementation 'com.google.android.libraries.places:places:2.4.0'
 }

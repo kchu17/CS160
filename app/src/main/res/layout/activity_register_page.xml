@@ -13,7 +13,7 @@
         android:layout_height="62dp"
         android:layout_marginTop="56dp"
         android:fontFamily="sans-serif-black"
-        android:text="Amazing App"
+        android:text="Mesero"
         android:textAlignment="center"
         android:textColor="#101010"
         android:textSize="36sp"

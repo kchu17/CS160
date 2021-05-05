@@ -6,10 +6,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -51,6 +55,7 @@ public class find_restaurant extends Fragment  {
     // dialog
 
     private FirestoreRecyclerAdapter adapter;
+    private ArrayList<ArrayList<MenuEntry>> menus;
 
     public find_restaurant() {
         // Required empty public constructor
@@ -92,7 +97,8 @@ public class find_restaurant extends Fragment  {
                              Bundle savedInstanceState)
     {
 
-        ArrayList<Restaurant> input = new ArrayList<>();
+
+        menus = new ArrayList<ArrayList<MenuEntry>>();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_find_restaurant, container, false);
@@ -112,19 +118,31 @@ public class find_restaurant extends Fragment  {
                 View view = inflater.from(parent.getContext()) .inflate(R.layout.find_restaurant, parent, false);
                 return new RestaurantViewHolder(view);
             }
-
             @Override
             protected void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position, @NonNull Restaurant model) {
 
                 holder.restaurantName.setText(model.getRestaurantName());
                 holder.restaurantType.setText(model.getType());
                 holder.restaurantRating.setText(Double.toString(model.getRating()));
+                if (model.getMenu() != null && !model.getMenu().isEmpty())
+                {
+                    Log.d("MenuEntry,", "onCreateView:  Added menu for " + model.getRestaurantName());
+                    menus.add(model.getMenu());
+
+                }
+                else
+                {
+                    menus.add(new ArrayList<MenuEntry>());
+                }
 
 
                 Glide.with(getContext()).load(Uri.parse(model.getImageUri())).into(holder.restaurantImage);
 
+
+
             }
         };
+
 
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -147,41 +165,10 @@ public class find_restaurant extends Fragment  {
     }
 
 
-    // TODO: will be used later
-    /*
-    @Override
-    public void onRowClick(int position) {
-        Toast.makeText(getActivity(), "You clicked row #" + Integer.toString(position), Toast.LENGTH_SHORT).show();
 
-        // setting up dialog
-        final Dialog dialog = new Dialog(getActivity());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View custom_dialog = inflater.inflate(R.layout.table_number_layout, null);
-        Button readyBtn = custom_dialog.findViewById(R.id.readyButton);
-        Button cancelBtn = custom_dialog.findViewById(R.id.cancelButton);
 
-        // setting action listeners
-        readyBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Pressed Ready!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Pressed Cancel!", Toast.LENGTH_SHORT).show();
-                dialog.cancel();
-            }
-        });
 
-        dialog.setContentView(custom_dialog);
-        dialog.show();
-    }
-
-*/
     private class RestaurantViewHolder extends RecyclerView.ViewHolder  {
 
         private TextView restaurantName;
@@ -205,12 +192,27 @@ public class find_restaurant extends Fragment  {
                     if (position != RecyclerView.NO_POSITION)
                     {
                         Toast.makeText(getActivity(), "Clicked row # " + getAdapterPosition() , Toast.LENGTH_SHORT).show();
+
+
+
+                            // TODO: check if I have to check if its null before hand
+                            MainActivity activity = (MainActivity) getActivity();
+                            activity.setMenu(menus.get(getAdapterPosition()));
+
+
+
+                        final NavController navController = Navigation.findNavController(v);
+                        navController.navigate(R.id.menu);
                     }
 
                 }
             });
+
+
         }
 
 
     }
+
+
 }

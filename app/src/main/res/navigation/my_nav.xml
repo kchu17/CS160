@@ -3,13 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_nav"
-    app:startDestination="@id/menu">
+    app:startDestination="@id/find_restaurant_page">
 
     <fragment
         android:id="@+id/menu"
         android:name="edu.sjsu.android.cs_160_project.menu"
         android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" />
+        tools:layout="@layout/fragment_menu" >
+        <argument
+            android:name="RestaurantId"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
     <fragment
         android:id="@+id/find_restaurant_page"
         android:name="edu.sjsu.android.cs_160_project.find_restaurant"
@@ -19,5 +24,10 @@
         android:id="@+id/order_page"
         android:name="edu.sjsu.android.cs_160_project.order_page"
         android:label="fragment_order_page"
-        tools:layout="@layout/fragment_order_page" />
+        tools:layout="@layout/fragment_order_page" >
+        <argument
+            android:name="message"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
 </navigation>

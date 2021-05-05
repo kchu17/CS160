@@ -57,10 +57,11 @@ public class loginPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+
     }
 
 
-
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -72,11 +73,18 @@ public class loginPage extends AppCompatActivity {
             startActivity(intent);
         }
     }
+    
+ */
 
     public void register_user(View view) {
 
+       /*
         startActivity(new Intent(this, RegisterPage.class));
         finish();
+
+        */
+        CustomRestaurantTypeDialog customRestaurantTypeDialog = new CustomRestaurantTypeDialog();
+        customRestaurantTypeDialog.show(getSupportFragmentManager(), "testing");
     }
 
     public void login_user(View view) {
@@ -93,7 +101,7 @@ public class loginPage extends AppCompatActivity {
                 {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
-                    Intent intent = new Intent(loginPage.this, MainActivity.class);
+                    Intent intent = new Intent(loginPage.this, MainActivity.class);  // change intent
                     startActivity(intent);
 
                 }

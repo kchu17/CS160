@@ -3,10 +3,17 @@ package edu.sjsu.android.cs_160_project;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +31,11 @@ public class order_page extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ArrayList<MenuEntry> orders;
+    private RecyclerView mRecyclerView;
+    private TextView amountTxt;
+    private double amountNumeric;
+    private static DecimalFormat decimalFormat = new DecimalFormat("#.##");
     public order_page() {
         // Required empty public constructor
     }
@@ -59,6 +71,41 @@ public class order_page extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order_page, container, false);
+        View view =  inflater.inflate(R.layout.fragment_order_page, container, false);
+        amountTxt = view.findViewById(R.id.numberTotal);
+        amountNumeric = 0.0;
+
+        MainActivity activity = (MainActivity) getActivity();
+        ArrayList<MenuEntry> temp_orders  = activity.getOrders();
+
+        if (temp_orders != null)
+        {
+            orders = temp_orders;
+        }
+        else
+        {
+            orders = new ArrayList<MenuEntry>();
+        }
+
+        for (int i = 0; i < orders.size(); i++)
+        {
+            amountNumeric += orders.get(i).getPrice();
+        }
+
+        amountTxt.setText("$ " + decimalFormat.format(amountNumeric));
+
+        setUpRecyclerView(view);
+        return view;
+    }
+
+    private void setUpRecyclerView(View view)
+    {
+        mRecyclerView = view.findViewById(R.id.ordersRecyclerView);
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.Adapter<CustomerOrderAdapter.ViewHolder> adapter = new CustomerOrderAdapter(orders);
+        mRecyclerView.setAdapter(adapter);
     }
 }
