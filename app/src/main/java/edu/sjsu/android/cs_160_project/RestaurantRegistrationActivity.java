@@ -16,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
@@ -25,36 +28,53 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RestaurantRegistrationActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE = 500;
+    private final String PROFILE_PIC_PATH = "profiles";
+    private final String TAG = "RestaurantRegistration";
+
 
     private ImageView restaurantImage;
     private EditText restaurantName;
-    private EditText restaurantPhoneNumber;
+    private EditText restaurantType;
     private EditText adminEmail;
     private EditText passwordEditText;
     private Uri imageURI;
     private FirebaseStorage storage;
+    private FirebaseFirestore db;
     private StorageReference reference;
+    private String uploadedImageURL;
+    private LatLng mLatLng;
+    private String restaurantAddress;
+    private String restaurantDbId;
+    private FirebaseAuth mAuth;
+
 
     private boolean imageSelected;
+    private boolean latLngSelected;
+    private boolean restaurantAddressSelected;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_registration);
 
-
+        restaurantDbId = "";
         restaurantImage = findViewById(R.id.restaurantImageView);
         restaurantName = findViewById(R.id.restaurantName);
-        //restaurantPhoneNumber = findViewById(R.id.restaurantPhoneNumber);
+        restaurantType = findViewById(R.id.restaurantType);
         adminEmail = findViewById(R.id.adminEmail);
         passwordEditText = findViewById(R.id.password);
         restaurantImage = findViewById(R.id.restaurantImageView);
@@ -62,33 +82,39 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
         // setting image view to default
         restaurantImage.setImageResource(R.drawable.image_placeholder);
         imageSelected = false; //setting the appropriate flag
+        latLngSelected = false;
+        restaurantAddressSelected = false;
 
         //getting database
+        db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         reference = storage.getReference();
 
 
         // Initializing Google Places
         Places.initialize(getApplicationContext(), "AIzaSyDsqqKSWeYyRAiHPx3t1Vozn7tyBp_SXBA");
-
         PlacesClient placesClient = Places.createClient(this);
 
+        // Set up autocomplete fragement
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         autocompleteFragment.setCountries("US");
-
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
-
-
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                Log.d("PlacesAPI", "onPlaceSelected: Place: " + place.getName() + " || Address: " + place.getAddress() + " || LatLng: " + place.getLatLng());
+                Log.d(TAG, "onPlaceSelected: Place: " + place.getName() + " || Address: " + place.getAddress() + " || LatLng: " + place.getLatLng());
+                mLatLng = place.getLatLng();
+                restaurantAddress = place.getAddress();
+                latLngSelected = true;
+                restaurantAddressSelected = true;
+
             }
 
             @Override
             public void onError(@NonNull Status status) {
-                Log.d("PlacesAPI", "onError: Error: " + status.toString());
+                Log.d(TAG, "onError: Error in Places API " + status.toString());
             }
         });
 
@@ -102,7 +128,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
     public void onRegisterBtn(View view) {
 
         String restaurantNameInput = restaurantName.getText().toString().trim();
-        String restaurantPhoneNumberInput = "hello"; // restaurantPhoneNumber.getText().toString().trim();
+        String restaurantTypeInput = restaurantType.getText().toString().trim();
         String adminEmailInput = adminEmail.getText().toString().trim();
         String passwordInput = passwordEditText.getText().toString().trim();
 
@@ -114,10 +140,10 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
             restaurantName.requestFocus();
             return;
         }
-        if (restaurantPhoneNumberInput.isEmpty())
+        if (restaurantTypeInput.isEmpty())
         {
-            restaurantPhoneNumber.setError("A phone number is required!");
-            restaurantPhoneNumber.requestFocus();
+            restaurantType.setError("Restaurant Type is required!");
+            restaurantType.requestFocus();
             return;
         }
         if (adminEmailInput.isEmpty())
@@ -150,9 +176,39 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
             Toast.makeText(this, "Please upload a profile image", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (latLngSelected != true)
+        {
+            Toast.makeText(this, "Please enter a location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (restaurantAddressSelected != true)
+        {
+            Toast.makeText(this, "Please enter a location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d(TAG, "onRegisterBtn: Passed all the requirements");
 
 
+        Log.d(TAG, "onRegisterBtn: Adding restaurant to database");
+        db.collection("restaurants").add(new Restaurant(restaurantNameInput, restaurantTypeInput,
+                4.7,"",new ArrayList<MenuEntry>(), mLatLng,restaurantAddress )).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful())
+                {
+                    Log.d(TAG, "onComplete: restaurant was successfully added to the database");
+                    restaurantDbId = task.getResult().getId();
+                    //uploadPic();
+                    addAdminUser(adminEmailInput, passwordInput);
 
+                }
+                else
+                {
+                    Log.d(TAG, "onComplete: restaurant FAILED to be added to the database");
+                }
+            }
+        });
     }
 
 
@@ -176,7 +232,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                 imageURI = data.getData();
                 restaurantImage.setImageURI(imageURI);
                 imageSelected = true;
-                uploadPic();
+
             }
         }
     }
@@ -186,10 +242,11 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image...");
         pd.show();
+        Log.d(TAG, "uploadPic: Beginning to upload pic");
 
         //Uri file = Uri.fromFile(new File("test/restaurantPhoto "));
         Uri file = imageURI;
-        StorageReference riversRef = reference.child("test/profileImage");
+        StorageReference riversRef = reference.child(""+restaurantDbId+"/ProfilePic");
 
 
         UploadTask uploadTask = riversRef.putFile(file);
@@ -201,6 +258,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                 // Handle unsuccessful uploads
                 pd.dismiss();
                 Toast.makeText(RestaurantRegistrationActivity.this, "Image Uploading failed..", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFailure: Failed to upload restaurant picture");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -209,14 +267,89 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                 // ...
                 pd.dismiss();
                 Snackbar.make(findViewById(android.R.id.content), "Image Uploaded", Snackbar.LENGTH_LONG).show();
+                Log.d(TAG, "onSuccess: restaurant picture was uploaded successfully");
 
 
+                Log.d(TAG, "uploadPic: Attempting to get download url for the image that was uploaded");
+                riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful())
+                        {
+                            Log.d(TAG, "onComplete: Successfully obtain url for image uploaded.");
+                            updateImageUrl(task.getResult().toString());
+                        }
+                        else
+                        {
+                            Log.d(TAG, "onComplete: Failed to get url for image");
+                        }
+                    }
+                });
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                 double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
                 pd.setMessage("Progress: " + (int) progressPercent + "%");
+            }
+        });
+
+
+
+    }
+
+    private void updateImageUrl(String url)
+    {
+        Log.d(TAG, "updateImageUrl: Attempting to update the url to the database");
+        DocumentReference docRef = db.collection("restaurants").document(restaurantDbId);
+        docRef.update("imageUri", url).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                {
+                    Log.d(TAG, "onComplete: Successfully updated image url in database");
+
+                }
+                else
+                {
+                    Log.d(TAG, "onComplete: FAILED to update image url in database");
+                }
+            }
+        });
+    }
+
+    private void addAdminUser(String email, String password)
+    {
+        Log.d(TAG, "addAdminUser: Creating User");
+
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful())
+                {
+                    Log.d(TAG, "onComplete: admin user was successfully created");
+
+                    User user = new User("", email, UserType.ADMIN_USER, restaurantDbId);
+                    Log.d(TAG, "onComplete: attemting to create user entry in database");
+                    db.collection("users").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                            {
+                                Log.d(TAG, "onComplete: Successfully added user file to database");
+                                uploadPic();
+                            }
+                            else
+                            {
+                                Log.d(TAG, "onComplete: Failed to add user file to database");
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    Log.d(TAG, "onComplete: Could not create admin user");
+                }
             }
         });
     }

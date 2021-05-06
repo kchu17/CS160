@@ -18,6 +18,17 @@
         app:layout_constraintTop_toBottomOf="@+id/restaurantImageView" />
 
     <EditText
+        android:id="@+id/restaurantType"
+        android:layout_width="354dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="24dp"
+        android:hint="Type Of Restaurant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
+
+    <EditText
         android:id="@+id/adminEmail"
         android:layout_width="354dp"
         android:layout_height="52dp"
@@ -26,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
+        app:layout_constraintTop_toBottomOf="@+id/restaurantType" />
 
     <EditText
         android:id="@+id/password"
@@ -43,8 +54,8 @@
 
     <Button
         android:id="@+id/registerBtn"
-        android:layout_width="308dp"
-        android:layout_height="58dp"
+        android:layout_width="322dp"
+        android:layout_height="60dp"
         android:layout_marginTop="28dp"
         android:onClick="onRegisterBtn"
         android:text="Register"
@@ -69,11 +80,11 @@
         android:id="@+id/restaurantImageView"
         android:layout_width="241dp"
         android:layout_height="173dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:onClick="onRestaurantImageClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerTitle"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/image_placeholder" />
 
     <EditText
@@ -86,20 +97,5 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autocomplete_fragment" />
-
-    <TextView
-        android:id="@+id/registerTitle"
-        android:layout_width="344dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Mesero"
-        android:textAlignment="center"
-        android:textColor="#101010"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
