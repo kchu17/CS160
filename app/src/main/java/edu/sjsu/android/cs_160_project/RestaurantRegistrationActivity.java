@@ -13,6 +13,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -53,14 +54,16 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
     private EditText adminEmail;
     private EditText passwordEditText;
     private Uri imageURI;
+    private ProgressBar progressBar;
     private FirebaseStorage storage;
     private FirebaseFirestore db;
     private StorageReference reference;
     private String uploadedImageURL;
-    private LatLng mLatLng;
     private String restaurantAddress;
     private String restaurantDbId;
     private FirebaseAuth mAuth;
+    private double longitude;
+    private double latitude;
 
 
     private boolean imageSelected;
@@ -78,6 +81,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
         adminEmail = findViewById(R.id.adminEmail);
         passwordEditText = findViewById(R.id.password);
         restaurantImage = findViewById(R.id.restaurantImageView);
+        progressBar = findViewById(R.id.progressBar2);
 
         // setting image view to default
         restaurantImage.setImageResource(R.drawable.image_placeholder);
@@ -105,7 +109,8 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 Log.d(TAG, "onPlaceSelected: Place: " + place.getName() + " || Address: " + place.getAddress() + " || LatLng: " + place.getLatLng());
-                mLatLng = place.getLatLng();
+                longitude = place.getLatLng().longitude;
+                latitude = place.getLatLng().latitude;
                 restaurantAddress = place.getAddress();
                 latLngSelected = true;
                 restaurantAddressSelected = true;
@@ -191,8 +196,9 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
 
 
         Log.d(TAG, "onRegisterBtn: Adding restaurant to database");
+        progressBar.setVisibility(View.VISIBLE);
         db.collection("restaurants").add(new Restaurant(restaurantNameInput, restaurantTypeInput,
-                4.7,"",new ArrayList<MenuEntry>(), mLatLng,restaurantAddress )).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                4.7,"",new ArrayList<MenuEntry>(),longitude,latitude ,restaurantAddress )).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful())
@@ -206,6 +212,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                 else
                 {
                     Log.d(TAG, "onComplete: restaurant FAILED to be added to the database");
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -257,6 +264,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
                 pd.dismiss();
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(RestaurantRegistrationActivity.this, "Image Uploading failed..", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onFailure: Failed to upload restaurant picture");
             }
@@ -282,6 +290,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                         else
                         {
                             Log.d(TAG, "onComplete: Failed to get url for image");
+                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
@@ -308,11 +317,15 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
                     Log.d(TAG, "onComplete: Successfully updated image url in database");
+                    Toast.makeText(RestaurantRegistrationActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RestaurantRegistrationActivity.this, loginPage.class));
+                    finish();
 
                 }
                 else
                 {
                     Log.d(TAG, "onComplete: FAILED to update image url in database");
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -342,6 +355,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                             else
                             {
                                 Log.d(TAG, "onComplete: Failed to add user file to database");
+                                progressBar.setVisibility(View.INVISIBLE);
                             }
                         }
                     });
@@ -349,6 +363,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                 else
                 {
                     Log.d(TAG, "onComplete: Could not create admin user");
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });

@@ -16,7 +16,8 @@ public class Restaurant {
     private String type;
     private String imageUri;
     private String restaurantAddress;
-    private com.google.android.gms.maps.model.LatLng latLng;
+    private double longitude;
+    private double latitude;
 
     ArrayList<MenuEntry> menu;
 
@@ -29,15 +30,32 @@ public class Restaurant {
         menu = input_menu;
     }
 
-    public Restaurant(String input_name, String input_type, double input_rating, String input_imageUri, ArrayList<MenuEntry> input_menu, com.google.android.gms.maps.model.LatLng latLng, String address)
+    public Restaurant(String input_name, String input_type, double input_rating, String input_imageUri, ArrayList<MenuEntry> input_menu, double longitude, double latitude, String address)
     {
         restaurantName = input_name;
         type = input_type;
         rating = input_rating;
         imageUri = input_imageUri;
         menu = input_menu;
-        this.latLng = latLng;
+        this.longitude = longitude;
+        this.latitude = latitude;
         restaurantAddress = address;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public Restaurant() // for firebase
@@ -51,14 +69,6 @@ public class Restaurant {
 
     public void setRestaurantAddress(String restaurantAddress) {
         this.restaurantAddress = restaurantAddress;
-    }
-
-    public  com.google.android.gms.maps.model.LatLng getLatLng() {
-        return latLng;
-    }
-
-    public void setLatLng( com.google.android.gms.maps.model.LatLng latLng) {
-        this.latLng = latLng;
     }
 
 

@@ -35,12 +35,14 @@ public class loginPage extends AppCompatActivity {
 
     public static final String EXTRA = "edu.sjsu.android.cs_160_project.extra";
     public static final String EXTRA_EMAIL = "edu.sjsu.android.cs_160_project.email";
+    private static final String TAG = "onLoginPage";
 
     private ActivityLoginPageBinding binding;
     private EditText passwordInput;
     private EditText emailInput;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
 
     @Override
@@ -55,6 +57,7 @@ public class loginPage extends AppCompatActivity {
         passwordInput = binding.password;
         progressBar = binding.progressBar;
         mAuth = FirebaseAuth.getInstance();
+        db  = FirebaseFirestore.getInstance();
 
 
 
@@ -69,12 +72,54 @@ public class loginPage extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) // Checking to see if the user is currently logged in
         {
+            /*
             Intent intent = new Intent(loginPage.this, MainActivity.class);
             startActivity(intent);
+             */
+/*
+            start_correct_activity(mAuth.getUid());
         }
     }
-    
- */
+
+*/
+    private void start_correct_activity(String id)
+    {
+        Log.d(TAG, "start_correct_activity: Attempting to get user from database");
+        DocumentReference reference = db.collection("users").document(id);
+
+        reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    Log.d(TAG, "onComplete: Successfully retrieved user from database");
+
+                    User user = task.getResult().toObject(User.class);
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    if (user.getType()== UserType.ADMIN_USER)
+                    {
+                        Log.d(TAG, "onComplete: User is of type admin");
+                        startActivity(new Intent(loginPage.this, AdminMainActivity.class));
+                        finish();
+                    }
+                    else
+                    {
+                        Log.d(TAG, "onComplete: user is of type regular");
+                        startActivity(new Intent(loginPage.this, MainActivity.class));
+                        finish();
+                    }
+                }
+                else
+                {
+                    Log.d(TAG, "onComplete: Could not retrieve user from database");
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(loginPage.this, "Unsuccessful Login", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     public void register_user(View view) {
 
@@ -100,9 +145,12 @@ public class loginPage extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
                     Toast.makeText(loginPage.this, "Sucessfully logged in!", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Intent intent = new Intent(loginPage.this, MainActivity.class);  // change intent
+
+
+                    start_correct_activity(mAuth.getUid());
+                    /*Intent intent = new Intent(loginPage.this, MainActivity.class);  // change intent
                     startActivity(intent);
+                     */
 
                 }
                 else

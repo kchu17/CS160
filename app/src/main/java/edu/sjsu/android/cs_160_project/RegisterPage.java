@@ -95,7 +95,7 @@ public class RegisterPage extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
 
-                    User user = new User(fullName_input, email_input);
+                    User user = new User(fullName_input, email_input,UserType.REGULAR_USER, "");
 
                     Toast toast = Toast.makeText(RegisterPage.this,"Registration Successful!", Toast.LENGTH_SHORT);
                     toast.show();
