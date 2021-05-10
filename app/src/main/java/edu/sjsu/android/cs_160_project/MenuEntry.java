@@ -6,13 +6,14 @@ public class MenuEntry {
     String description;
     String image_url;
     double price;
+    boolean show;
 
-
-    public MenuEntry(String name, String description, double price, String image_url) {
+    public MenuEntry(String name, String description, double price, String image_url, boolean show) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.image_url = image_url;
+        this.show = show;
     }
     public MenuEntry()
     {
@@ -50,5 +51,13 @@ public class MenuEntry {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean getShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
     }
 }
