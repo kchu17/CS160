@@ -5,11 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -62,6 +64,12 @@ public class HelperAdapter extends RecyclerView.Adapter {
         viewHolderClass.desc.setText(menu.get(position).getDescription());
         viewHolderClass.show.setChecked(menu.get(position).getShow());
 
+        viewHolderClass.modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.addToMenu);
+            }
+        });
 
         // Implement change of the switch function
 //        viewHolderClass.show.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -83,6 +91,7 @@ public class HelperAdapter extends RecyclerView.Adapter {
         TextView price;
         TextView desc;
         SwitchCompat show;
+        Button modify;
 
         public ViewHolderClass(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +100,7 @@ public class HelperAdapter extends RecyclerView.Adapter {
             price = (TextView) itemView.findViewById(R.id.item_price);
             show = itemView.findViewById(R.id.item_show);
             desc = (TextView) itemView.findViewById(R.id.item_desc);
+            modify = (Button) itemView.findViewById(R.id.button_modify);
         }
     }
 }
