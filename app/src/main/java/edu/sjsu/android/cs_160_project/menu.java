@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +23,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.model.ServerTimestamps;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class menu extends Fragment implements MenuAdapter.onCartMenuListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "onClientMenuFragment";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -152,13 +156,26 @@ public class menu extends Fragment implements MenuAdapter.onCartMenuListener {
         View custom_dialog = inflater.inflate(R.layout.table_number_layout, null);
         Button readyBtn = custom_dialog.findViewById(R.id.readyButton);
         Button cancelBtn = custom_dialog.findViewById(R.id.cancelButton);
+        EditText tableNumberTxt = custom_dialog.findViewById(R.id.tableNumberTxt);
 
         // setting action listeners
         readyBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Pressed Ready!", Toast.LENGTH_SHORT).show();
+                int table_number;
+                MainActivity activity = (MainActivity) getActivity();
 
+                try {
+                    table_number = Integer.parseInt(tableNumberTxt.getText().toString().trim());
+                }
+                catch (NumberFormatException e)
+                {
+                    Log.d(TAG, "onClick: Could not conevert table number string to an int.");
+                    table_number = -1;
+                }
+
+                activity.setTableNumber(table_number);
                 dialog.dismiss();
 
             }
@@ -181,6 +198,7 @@ public class menu extends Fragment implements MenuAdapter.onCartMenuListener {
     public void onCartMenuClick(int position) {
         activity.addSingleOrder(menu.get(position));
         Toast.makeText(getActivity(), "Item Added To Cart!", Toast.LENGTH_SHORT).show();
+
     }
 
 

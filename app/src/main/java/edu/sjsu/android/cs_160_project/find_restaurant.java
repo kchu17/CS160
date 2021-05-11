@@ -27,6 +27,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,7 +56,8 @@ public class find_restaurant extends Fragment  {
     // dialog
 
     private FirestoreRecyclerAdapter adapter;
-    private ArrayList<ArrayList<MenuEntry>> menus;
+    private ArrayList<ArrayList<MenuEntry>>menus;
+    private ArrayList<String> documentIds;
 
     public find_restaurant() {
         // Required empty public constructor
@@ -99,6 +101,7 @@ public class find_restaurant extends Fragment  {
 
 
         menus = new ArrayList<ArrayList<MenuEntry>>();
+        documentIds = new ArrayList<>();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_find_restaurant, container, false);
@@ -128,11 +131,13 @@ public class find_restaurant extends Fragment  {
                 {
                     Log.d("MenuEntry,", "onCreateView:  Added menu for " + model.getRestaurantName());
                     menus.add(model.getMenu());
+                    documentIds.add(getSnapshots().getSnapshot(position).getId());
 
                 }
                 else
                 {
                     menus.add(new ArrayList<MenuEntry>());
+                    documentIds.add("");
                 }
 
 
@@ -198,6 +203,7 @@ public class find_restaurant extends Fragment  {
                             // TODO: check if I have to check if its null before hand
                             MainActivity activity = (MainActivity) getActivity();
                             activity.setMenu(menus.get(getAdapterPosition()));
+                            activity.setRestaurantId(documentIds.get(getAdapterPosition()));
 
 
 

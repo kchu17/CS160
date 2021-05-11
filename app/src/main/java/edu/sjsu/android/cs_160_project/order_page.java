@@ -2,15 +2,26 @@ package edu.sjsu.android.cs_160_project;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1.StructuredQuery;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,12 +31,13 @@ import java.util.ArrayList;
  * Use the {@link order_page#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class order_page extends Fragment {
+public class order_page extends Fragment implements View.OnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "onClientOrderPage";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -36,6 +48,8 @@ public class order_page extends Fragment {
     private TextView amountTxt;
     private double amountNumeric;
     private static DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+    private Button placeOrderBtn;
     public order_page() {
         // Required empty public constructor
     }
@@ -74,6 +88,9 @@ public class order_page extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_order_page, container, false);
         amountTxt = view.findViewById(R.id.numberTotal);
         amountNumeric = 0.0;
+        placeOrderBtn = view.findViewById(R.id.placeOrderBtn);
+        placeOrderBtn.setOnClickListener(this);
+
 
         MainActivity activity = (MainActivity) getActivity();
         ArrayList<MenuEntry> temp_orders  = activity.getOrders();
@@ -94,6 +111,7 @@ public class order_page extends Fragment {
 
         amountTxt.setText("$ " + decimalFormat.format(amountNumeric));
 
+
         setUpRecyclerView(view);
         return view;
     }
@@ -107,5 +125,49 @@ public class order_page extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         RecyclerView.Adapter<CustomerOrderAdapter.ViewHolder> adapter = new CustomerOrderAdapter(orders);
         mRecyclerView.setAdapter(adapter);
+    }
+
+    public void placeOrder()
+    {
+        Log.d(TAG, "onPlaceOrder: Placing order...");
+        MainActivity activity = (MainActivity)getActivity();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        OrderModel order =  activity.getOrderTracker();
+        order.setTimestamp(Timestamp.now());
+        String documentID = order.getRestaurantID();
+
+        if (documentID == null || documentID.length() == 0)
+        {return;}
+
+        db.collection("restaurants").document(documentID).collection("Orders").add(order).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful())
+                {
+                    Log.d(TAG, "onComplete: Added order successfully");
+                    Toast.makeText(getActivity(), "Order has been placed!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Log.d(TAG, "onComplete: Failed to save order in the database");
+                    Toast.makeText(getActivity(), "Failed to place order!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.placeOrderBtn:
+                placeOrder();
+                break;
+            default: break;
+
+        }
     }
 }

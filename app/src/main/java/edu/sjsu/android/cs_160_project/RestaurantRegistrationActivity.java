@@ -321,6 +321,7 @@ public class RestaurantRegistrationActivity extends AppCompatActivity {
                     startActivity(new Intent(RestaurantRegistrationActivity.this, loginPage.class));
                     finish();
 
+
                 }
                 else
                 {

@@ -35,6 +35,7 @@ public class loginPage extends AppCompatActivity {
 
     public static final String EXTRA = "edu.sjsu.android.cs_160_project.extra";
     public static final String EXTRA_EMAIL = "edu.sjsu.android.cs_160_project.email";
+    public static final String EXTRA_NAME = "edu.sjsu.android.cs_160_project.name";
     private static final String TAG = "onLoginPage";
 
     private ActivityLoginPageBinding binding;
@@ -64,7 +65,7 @@ public class loginPage extends AppCompatActivity {
     }
 
 
-/*
+
     @Override
     public void onStart() {
         super.onStart();
@@ -76,12 +77,12 @@ public class loginPage extends AppCompatActivity {
             Intent intent = new Intent(loginPage.this, MainActivity.class);
             startActivity(intent);
              */
-/*
+
             start_correct_activity(mAuth.getUid());
         }
     }
 
-*/
+
     private void start_correct_activity(String id)
     {
         Log.d(TAG, "start_correct_activity: Attempting to get user from database");
@@ -106,7 +107,15 @@ public class loginPage extends AppCompatActivity {
                     else
                     {
                         Log.d(TAG, "onComplete: user is of type regular");
-                        startActivity(new Intent(loginPage.this, MainActivity.class));
+
+                        Bundle extras = new Bundle();
+                        extras.putString(EXTRA_NAME, user.getFullName());
+                        extras.putString(EXTRA_EMAIL, user.getEmail());
+
+                        Intent intent = new Intent(loginPage.this, MainActivity.class);
+                        intent.putExtras(extras);
+
+                        startActivity(intent);
                         finish();
                     }
                 }
