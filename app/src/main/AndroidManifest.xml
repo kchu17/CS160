@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.sjsu.android.cs_160_project">
-
+    <meta-data
+        android:name="com.google.android.gms.wallet.api.enabled"
+        android:value="true" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,10 +14,12 @@
         <activity android:name=".AdminMainActivity"></activity>
         <activity android:name=".UploadRestaurantPhotoActivity" />
         <activity android:name=".RestaurantRegistrationActivity" />
+<!--        <activity android:name=".Payment" />-->
         <activity android:name=".PasswordReset" />
         <activity android:name=".RegisterPage" />
         <activity android:name=".MainActivity" />
         <activity android:name=".loginPage">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
