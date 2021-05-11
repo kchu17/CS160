@@ -9,13 +9,14 @@ public class MenuEntry implements Parcelable {
     String description;
     String image_url;
     double price;
+    boolean show;
 
-
-    public MenuEntry(String name, String description, double price, String image_url) {
+    public MenuEntry(String name, String description, double price, String image_url, boolean show) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.image_url = image_url;
+        this.show = show;
     }
     public MenuEntry()
     {
@@ -54,6 +55,14 @@ public class MenuEntry implements Parcelable {
     public void setPrice(double price) {
         this.price = price;
     }
+    public boolean getShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
+    }
+
 
     @Override
     public int describeContents() {
@@ -66,6 +75,7 @@ public class MenuEntry implements Parcelable {
         dest.writeString(this.description);
         dest.writeString(this.image_url);
         dest.writeDouble(this.price);
+        dest.writeByte(this.show ? (byte) 1 : (byte) 0);
     }
 
     public void readFromParcel(Parcel source) {
@@ -73,6 +83,7 @@ public class MenuEntry implements Parcelable {
         this.description = source.readString();
         this.image_url = source.readString();
         this.price = source.readDouble();
+        this.show = source.readByte() != 0;
     }
 
     protected MenuEntry(Parcel in) {
@@ -80,6 +91,7 @@ public class MenuEntry implements Parcelable {
         this.description = in.readString();
         this.image_url = in.readString();
         this.price = in.readDouble();
+        this.show = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<MenuEntry> CREATOR = new Parcelable.Creator<MenuEntry>() {

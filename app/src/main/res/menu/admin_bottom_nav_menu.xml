@@ -4,7 +4,7 @@
     <item
         android:title="Menu"
         android:icon="@drawable/admin_menu_icon"
-        android:id="@+id/adminMenu"/>
+        android:id="@+id/restaurant_menu"/>
     <item
         android:title="QR Code"
         android:icon="@drawable/admin_qr_code"

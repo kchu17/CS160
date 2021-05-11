@@ -19,6 +19,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class AdminMainActivity extends AppCompatActivity {
 
     public final static String ORDER_MODEL_KEY = "edu.sjsu.android.cs_160_project.order";
@@ -26,6 +28,7 @@ public class AdminMainActivity extends AppCompatActivity {
     private final static String TAG = "OnAdminMain";
     private BottomNavigationView bottomNavigationView;
     private NavController navController;
+
     private ProgressBar progressBar;
 
     private String restaurantID;
@@ -33,6 +36,12 @@ public class AdminMainActivity extends AppCompatActivity {
     String orderID;
 
     FirebaseFirestore db;
+
+    private MenuEntry entry;
+    private int position;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,4 +129,20 @@ public class AdminMainActivity extends AppCompatActivity {
             }
         }
     }
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    public void setEntry(MenuEntry inputEntry)
+    {
+        this.entry = inputEntry;
+    }
+    public MenuEntry getEntry()
+    {
+        return entry;
+    }
+
 }

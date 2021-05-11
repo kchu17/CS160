@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_nav"
-    app:startDestination="@id/adminMenu">
+    app:startDestination="@id/restaurant_menu">
     <fragment
-        android:id="@+id/adminMenu"
+        android:id="@+id/restaraunt_menu"
         android:name="edu.sjsu.android.cs_160_project.adminMenu"
         android:label="fragment_admin_menu"
         tools:layout="@layout/fragment_admin_menu" />
@@ -19,4 +19,18 @@
         android:name="edu.sjsu.android.cs_160_project.adminOrders"
         android:label="fragment_admin_orders"
         tools:layout="@layout/fragment_admin_orders" />
+    <fragment
+        android:id="@+id/addToMenu"
+        android:name="edu.sjsu.android.cs_160_project.AddToMenu"
+        android:label="AddToMenu" />
+    <fragment
+        android:id="@+id/restaurant_menu"
+        android:name="edu.sjsu.android.cs_160_project.restaurant_menu"
+        android:label="fragment_restaurant_menu"
+        tools:layout="@layout/fragment_restaurant_menu" />
+    <fragment
+        android:id="@+id/modify_entry"
+        android:name="edu.sjsu.android.cs_160_project.modify_entry"
+        android:label="fragment_modify_entry"
+        tools:layout="@layout/fragment_modify_entry" />
 </navigation>
