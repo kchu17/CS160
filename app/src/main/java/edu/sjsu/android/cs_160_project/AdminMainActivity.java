@@ -72,6 +72,7 @@ public class AdminMainActivity extends AppCompatActivity {
 
 
     public String getRestaurantID(){
+        Log.d(TAG, "getRestaurantID: called ");
         return restaurantID;
     }
 

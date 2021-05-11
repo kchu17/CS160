@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_nav"
-    app:startDestination="@id/restaurant_menu">
+    app:startDestination="@id/adminQrCode">
     <fragment
         android:id="@+id/restaraunt_menu"
         android:name="edu.sjsu.android.cs_160_project.adminMenu"

@@ -125,7 +125,17 @@ public class AddToMenu extends Fragment {
                 MenuEntry newEntry = new MenuEntry(name, description, price, image_url, show);
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference ref = db.collection("restaurants").document("38LjguRoduFlv7Ne7sWn");
+                AdminMainActivity activity = (AdminMainActivity)getActivity();
+                String documentId;
+                if (activity.getRestaurantID() == null)
+                {
+                    documentId = "38LjguRoduFlv7Ne7sWn";
+                }
+                else
+                {
+                    documentId = activity.getRestaurantID();
+                }
+                DocumentReference ref = db.collection("restaurants").document(documentId);
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {

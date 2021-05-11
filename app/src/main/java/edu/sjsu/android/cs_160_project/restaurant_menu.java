@@ -25,6 +25,7 @@ import java.util.Objects;
 public class restaurant_menu extends Fragment {
     private Button newItem;
     private List<MenuEntry>menu;
+    public static final String TAG = "OnRestaurantMenu";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,7 +34,19 @@ public class restaurant_menu extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         View view = inflater.inflate(R.layout.fragment_restaurant_menu, container, false);
 
-        DocumentReference ref = db.collection("restaurants").document("38LjguRoduFlv7Ne7sWn");
+        AdminMainActivity activity = (AdminMainActivity) getActivity();
+        String documentId;
+        if (activity.getRestaurantID() == null)
+        {
+            documentId = "38LjguRoduFlv7Ne7sWn";
+        }
+        else
+        {
+            documentId = activity.getRestaurantID();
+        }
+
+        Log.d(TAG, "onCreateView: Document ID = " + documentId);
+        DocumentReference ref = db.collection("restaurants").document(documentId);
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
