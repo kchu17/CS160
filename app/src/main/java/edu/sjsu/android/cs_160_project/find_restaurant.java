@@ -58,6 +58,7 @@ public class find_restaurant extends Fragment  {
     private FirestoreRecyclerAdapter adapter;
     private ArrayList<ArrayList<MenuEntry>>menus;
     private ArrayList<String> documentIds;
+    private Button qrCodeBtn;
 
     public find_restaurant() {
         // Required empty public constructor
@@ -106,6 +107,8 @@ public class find_restaurant extends Fragment  {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_find_restaurant, container, false);
 
+        qrCodeBtn = view.findViewById(R.id.scanQrCodeBtn);
+
         db = FirebaseFirestore.getInstance(); // getting database
         Query query = db.collection("restaurants"); // preparing query to get information from database
         recyclerView = view.findViewById(R.id.Myrecycler);
@@ -153,6 +156,16 @@ public class find_restaurant extends Fragment  {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+
+
+        qrCodeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.startQrCodeScanner();
+            }
+        });
         return view;
     }
 

@@ -65,7 +65,7 @@ public class loginPage extends AppCompatActivity {
 
     }
 
-
+/*
 
     @Override
     public void onStart() {
@@ -80,7 +80,7 @@ public class loginPage extends AppCompatActivity {
         }
     }
 
-
+*/
     private void start_correct_activity(String id)
     {
         Log.d(TAG, "start_correct_activity: Attempting to get user from database");

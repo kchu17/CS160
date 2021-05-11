@@ -65,6 +65,9 @@ dependencies {
     // Google Places
     implementation 'com.google.android.libraries.places:places:2.4.0'
 
-    // QR CODE SCANNER
+    // QR CODE Maker
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+
+    // QR Code Scanner
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
 }

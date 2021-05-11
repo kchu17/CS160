@@ -116,4 +116,9 @@ public class MainActivity extends AppCompatActivity {
         //orders.add(singleOrder);
         orderTracker.getOrders().add(singleOrder);
     }
+
+    public void startQrCodeScanner()
+    {
+        startActivity(new Intent(MainActivity.this, QrCodeScanner.class));
+    }
 }

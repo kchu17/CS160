@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.sjsu.android.cs_160_project">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CS_160_Project">
-        <activity android:name=".AdminOrderDetails"></activity>
+        <activity android:name=".QrCodeScanner"></activity>
+        <activity android:name=".AdminOrderDetails" />
         <activity android:name=".AdminMainActivity" />
         <activity android:name=".UploadRestaurantPhotoActivity" />
         <activity android:name=".RestaurantRegistrationActivity" />
