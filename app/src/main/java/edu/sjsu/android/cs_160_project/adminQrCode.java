@@ -1,12 +1,18 @@
 package edu.sjsu.android.cs_160_project;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +30,8 @@ public class adminQrCode extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private final static String TAG = "OnAdminQRCode";
+    private ImageView qrCodeImageView;
     public adminQrCode() {
         // Required empty public constructor
     }
@@ -59,6 +67,22 @@ public class adminQrCode extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_qr_code, container, false);
+        View view =  inflater.inflate(R.layout.fragment_admin_qr_code, container, false);
+        
+        qrCodeImageView = view.findViewById(R.id.qrCodeImageView);
+        
+        try{
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.encodeBitmap("Restaurant", BarcodeFormat.QR_CODE, 400, 400);
+            qrCodeImageView.setImageBitmap(bitmap);
+            Log.d(TAG, "onCreateView: Created QR CODE!");
+        }
+        catch (Exception e)
+        {
+            Log.d(TAG, "onCreateView: failed to create QR code");
+            
+        }
+        
+        return view;
     }
 }

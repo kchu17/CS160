@@ -15,11 +15,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AdminOrderDetails extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "OnAdminOrderDet";
+    public static final String REPLY_KEY = "edu.sjsu.android.cs_160_project.detailreply";
+    private static DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     // UI Variables
     private TextView tableNumber;
@@ -49,6 +52,8 @@ public class AdminOrderDetails extends AppCompatActivity implements AdapterView.
 
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
+        Double result = 0.0;
+
         Log.d(TAG, "onCreate: Recieving intent...");
 
         if (extra != null)
@@ -63,10 +68,18 @@ public class AdminOrderDetails extends AppCompatActivity implements AdapterView.
                 tableNumber.setText(Integer.toString(orderRepresentation.getTableNumber()));
                 customerNameTxt.setText(orderRepresentation.getCustomerName());
                 customerEmailTxt.setText(orderRepresentation.getCustomerEmail());
+
+                result = 0.0;
+                for (int i= 0; i < orderRepresentation.getOrders().size(); i ++)
+                {
+                    result += orderRepresentation.getOrders().get(i).getPrice();
+                }
+                orderTotalTxt.setText("$ " + decimalFormat.format(result));
             }
             else
             {
-                orderRepresentation = new OrderModel(new ArrayList<MenuEntry>(), -1, "Unknown", "Unknown", "Unknown");
+                orderRepresentation = new OrderModel(new ArrayList<MenuEntry>(), -1, "Unknown", "Unknown", "Unknown", "$0.0");
+
             }
         }
 
@@ -118,7 +131,19 @@ public class AdminOrderDetails extends AppCompatActivity implements AdapterView.
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) { // Related to spinner object, no need to implemtn
+
+    }
+
+    public void onUpdateOrder(View view) {
+        Intent rIntent = new Intent();
+        Bundle extras = new Bundle();
+        extras.putParcelable(REPLY_KEY, orderRepresentation);
+        rIntent.putExtras(extras);
+
+        setResult(RESULT_OK, rIntent);
+        finish();
+
 
     }
 }

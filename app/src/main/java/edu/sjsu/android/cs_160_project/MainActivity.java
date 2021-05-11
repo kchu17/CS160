@@ -54,13 +54,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: User Name Received: " + user_name);
         Log.d(TAG, "onCreate: User Email Recieved: " + user_email);
 
-        orderTracker = new OrderModel(new ArrayList<MenuEntry>(), -1, user_name, user_email, "");
+        orderTracker = new OrderModel(new ArrayList<MenuEntry>(), -1, user_name, user_email, "", "$0.0");
         Log.d(TAG, "onCreate: created Order tracker");
 
 
 
     }
 
+    public void setAmount(String amount)
+    {
+        orderTracker.setTotalAmount(amount);
+        Log.d(TAG, "setAmount: set amount to " + amount);
+    }
     public void setRestaurantId(String restaurantId)
     {
         orderTracker.setRestaurantID(restaurantId);

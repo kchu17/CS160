@@ -36,6 +36,7 @@ public class loginPage extends AppCompatActivity {
     public static final String EXTRA = "edu.sjsu.android.cs_160_project.extra";
     public static final String EXTRA_EMAIL = "edu.sjsu.android.cs_160_project.email";
     public static final String EXTRA_NAME = "edu.sjsu.android.cs_160_project.name";
+    public static final String RESTAURANT_ID = "edu.sjsu.android.cs_160_project.restaurantID";
     private static final String TAG = "onLoginPage";
 
     private ActivityLoginPageBinding binding;
@@ -65,7 +66,7 @@ public class loginPage extends AppCompatActivity {
     }
 
 
-
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -73,15 +74,12 @@ public class loginPage extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) // Checking to see if the user is currently logged in
         {
-            /*
-            Intent intent = new Intent(loginPage.this, MainActivity.class);
-            startActivity(intent);
-             */
+
 
             start_correct_activity(mAuth.getUid());
         }
     }
-
+*/
 
     private void start_correct_activity(String id)
     {
@@ -101,7 +99,11 @@ public class loginPage extends AppCompatActivity {
                     if (user.getType()== UserType.ADMIN_USER)
                     {
                         Log.d(TAG, "onComplete: User is of type admin");
-                        startActivity(new Intent(loginPage.this, AdminMainActivity.class));
+                        Bundle extraB = new Bundle();
+                        extraB.putString(RESTAURANT_ID, user.getRestaurantID());
+                        Intent intentB = new Intent(loginPage.this, AdminMainActivity.class);
+                        intentB.putExtras(extraB);
+                        startActivity(intentB);
                         finish();
                     }
                     else

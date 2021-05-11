@@ -1,5 +1,6 @@
 package edu.sjsu.android.cs_160_project;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -86,7 +87,13 @@ public class adminOrders extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         //Query
-        Query query = db.collection("restaurants").document("6rt1UbQGVV0H0dGaXK0J").collection("Orders"); // order by timespam
+       /* Query query = db.collection("restaurants").document("6rt1UbQGVV0H0dGaXK0J")
+                .collection("Orders").whereLessThanOrEqualTo("orderStatus", 11).orderBy("orderStatus")
+                .orderBy("timestamp"); // order by timespam*/
+
+        AdminMainActivity activity = (AdminMainActivity) getActivity();
+        Query query = db.collection("restaurants").document(activity.getRestaurantID())
+                .collection("Orders") .orderBy("orderStatus").whereNotEqualTo("orderStatus", 12);
 
 
         // Recycler Options
@@ -104,13 +111,33 @@ public class adminOrders extends Fragment {
             protected void onBindViewHolder(@NonNull OrdersViewHolder holder, int position, @NonNull OrderModel model) {
                 holder.tableIdentifier.setText(Integer.toString(model.getTableNumber()));
                 holder.clientName.setText(model.getCustomerName());
-                holder.price.setText("$ 89.99");
+                holder.price.setText(model.getTotalAmount());
+
+                int status = model.getOrderStatus();
+
+                if (status == OrderStatus.IN_PROGRESS)
+                {
+                    holder.orderStatus.setText("Progress");
+                    holder.orderStatus.setBackgroundColor(Color.rgb(255, 87,34));
+                }
+                else if (status == OrderStatus.DONE)
+                {
+                    holder.orderStatus.setText("Done");
+                    holder.orderStatus.setBackgroundColor(Color.GREEN);
+                }
+                else
+                {
+                    holder.orderStatus.setText("Recieved");
+                    holder.orderStatus.setBackgroundColor(Color.BLUE);
+                }
+
+
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getActivity(), "You touched #" + position, Toast.LENGTH_SHORT).show();
                         AdminMainActivity activity = (AdminMainActivity) getActivity();
-                        activity.goToActivityFromOrders(model);
+                        activity.goToActivityFromOrders(model, position, getSnapshots().getSnapshot(position).getId());
                     }
                 });
 

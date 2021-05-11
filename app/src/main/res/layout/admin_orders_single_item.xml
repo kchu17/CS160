@@ -49,10 +49,11 @@
 
     <TextView
         android:id="@+id/timestampTxt"
-        android:layout_width="167dp"
-        android:layout_height="42dp"
+        android:layout_width="161dp"
+        android:layout_height="48dp"
         android:text="TimeStamp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/clientNameTxt"
         app:layout_constraintTop_toTopOf="@+id/tableIdentifierTxt" />
 

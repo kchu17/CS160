@@ -110,6 +110,7 @@ public class order_page extends Fragment implements View.OnClickListener {
         }
 
         amountTxt.setText("$ " + decimalFormat.format(amountNumeric));
+        activity.setAmount("$" + decimalFormat.format(amountNumeric));
 
 
         setUpRecyclerView(view);

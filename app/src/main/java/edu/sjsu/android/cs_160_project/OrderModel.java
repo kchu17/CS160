@@ -15,19 +15,32 @@ public class OrderModel implements Parcelable {
     private String restaurantID;
     private int orderStatus;
     private Timestamp timestamp;
+    private String totalAmount;
 
-    public OrderModel(ArrayList<MenuEntry> order, int tableNumber, String customerName, String customerEmail, String restaurantID) {
+    public OrderModel(ArrayList<MenuEntry> order, int tableNumber, String customerName, String customerEmail, String restaurantID, String totalAmount) {
         this.orders = order;
         this.tableNumber = tableNumber;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.restaurantID = restaurantID;
         this.orderStatus = OrderStatus.ORDERED;
+        this.totalAmount = totalAmount;
     }
+
+
     public OrderModel() // for firebase
     {
 
     }
+
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
 
     public int getOrderStatus() {
         return orderStatus;
@@ -86,6 +99,7 @@ public class OrderModel implements Parcelable {
         this.customerEmail = customerEmail;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,35 +107,36 @@ public class OrderModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.orders);
+        dest.writeTypedList(this.orders);
         dest.writeInt(this.tableNumber);
         dest.writeString(this.customerName);
         dest.writeString(this.customerEmail);
         dest.writeString(this.restaurantID);
         dest.writeInt(this.orderStatus);
         dest.writeParcelable(this.timestamp, flags);
+        dest.writeString(this.totalAmount);
     }
 
     public void readFromParcel(Parcel source) {
-        this.orders = new ArrayList<MenuEntry>();
-        source.readList(this.orders, MenuEntry.class.getClassLoader());
+        this.orders = source.createTypedArrayList(MenuEntry.CREATOR);
         this.tableNumber = source.readInt();
         this.customerName = source.readString();
         this.customerEmail = source.readString();
         this.restaurantID = source.readString();
         this.orderStatus = source.readInt();
         this.timestamp = source.readParcelable(Timestamp.class.getClassLoader());
+        this.totalAmount = source.readString();
     }
 
     protected OrderModel(Parcel in) {
-        this.orders = new ArrayList<MenuEntry>();
-        in.readList(this.orders, MenuEntry.class.getClassLoader());
+        this.orders = in.createTypedArrayList(MenuEntry.CREATOR);
         this.tableNumber = in.readInt();
         this.customerName = in.readString();
         this.customerEmail = in.readString();
         this.restaurantID = in.readString();
         this.orderStatus = in.readInt();
         this.timestamp = in.readParcelable(Timestamp.class.getClassLoader());
+        this.totalAmount = in.readString();
     }
 
     public static final Parcelable.Creator<OrderModel> CREATOR = new Parcelable.Creator<OrderModel>() {
