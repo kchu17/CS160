@@ -2,16 +2,27 @@ package edu.sjsu.android.cs_160_project;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +90,96 @@ public class modify_entry extends Fragment {
         imageURL.setText(entry.getImage_url());
         Switch switchShow = view.findViewById(R.id.switchShow);
         switchShow.setChecked(entry.getShow());
+
+        Button modify = view.findViewById(R.id.modify_firestore_entry);
+
+        modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = editTitle.getText().toString().trim();
+                String description = editDescription.getText().toString().trim();
+                String image_url = imageURL.getText().toString().trim();
+                double price = 0;
+                if (!editPrice.getText().toString().trim().isEmpty())
+                    price = Double.parseDouble(editPrice.getText().toString().trim());
+                boolean show = switchShow.isChecked();
+                if (name.isEmpty())
+                {
+                    editTitle.setError("Title is required!");
+                    editTitle.requestFocus();
+                    return;
+                }
+                if (description.isEmpty())
+                {
+                    editDescription.setError("Description is required!");
+                    editDescription.requestFocus();
+                    return;
+                }
+                if (image_url.isEmpty())
+                {
+                    editTitle.setError("Image url is required!");
+                    editTitle.requestFocus();
+                    return;
+                }
+                if (Double.toString(price).isEmpty())
+                {
+                    editTitle.setError("Price cannot be empty!");
+                    editTitle.requestFocus();
+                    return;
+                } else if (price < 0) {
+                    editTitle.setError("Price cannot be negative!");
+                    editTitle.requestFocus();
+                    return;
+                }
+                MenuEntry newEntry = new MenuEntry(name, description, price, image_url, show);
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference ref = db.collection("restaurants").document("38LjguRoduFlv7Ne7sWn");
+                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Restaurant temp = Objects.requireNonNull(task.getResult()).toObject(Restaurant.class);
+                            assert temp != null;
+                            ArrayList<MenuEntry> menu = temp.getMenu();
+                            menu.remove(activity.getPosition());
+                            menu.add(newEntry);
+                            ref.update("menu", menu);
+                            Toast.makeText(getActivity(), "Successfully saved to you menu!" , Toast.LENGTH_LONG).show();
+
+                            Navigation.findNavController(v).navigate(R.id.restaurant_menu);
+                            Toast.makeText(getActivity(), "Done!", Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
+            }
+        });
+
+        Button delete = (Button) view.findViewById(R.id.removeEntry);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference ref = db.collection("restaurants").document("38LjguRoduFlv7Ne7sWn");
+                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Restaurant temp = Objects.requireNonNull(task.getResult()).toObject(Restaurant.class);
+                            assert temp != null;
+                            ArrayList<MenuEntry> menu = temp.getMenu();
+                            menu.remove(activity.getPosition());
+                            ref.update("menu", menu);
+                            Toast.makeText(getActivity(), "Successfully saved to you menu!" , Toast.LENGTH_LONG).show();
+
+                            Navigation.findNavController(v).navigate(R.id.restaurant_menu);
+                            Toast.makeText(getActivity(), "Done!", Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
+            }
+        });
         return view;
     }
 }

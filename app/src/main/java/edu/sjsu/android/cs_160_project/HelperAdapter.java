@@ -71,6 +71,7 @@ public class HelperAdapter extends RecyclerView.Adapter {
 
                 AdminMainActivity activity = (AdminMainActivity) context;
                 activity.setEntry(menu.get(position));
+                activity.setPosition(position);
 
                 Navigation.findNavController(v).navigate(R.id.modify_entry);
             }

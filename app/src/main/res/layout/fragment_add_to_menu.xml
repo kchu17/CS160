@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/add_new_item_layout">
+    android:id="@+id/delete_entry">
 
     <EditText
         android:id="@+id/editTitle"
@@ -105,12 +105,12 @@
         android:inputType="textPersonName"
         android:hint="10.99"
         app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintEnd_toStartOf="@+id/add_to_firestore"
+        app:layout_constraintEnd_toStartOf="@+id/modify_firestore_entry"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
-        android:id="@+id/add_to_firestore"
+        android:id="@+id/modify_firestore_entry"
         android:layout_width="187dp"
         android:layout_height="44dp"
         android:layout_marginStart="96dp"
@@ -130,7 +130,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Image URL"
-        app:layout_constraintBottom_toTopOf="@+id/add_to_firestore"
+        app:layout_constraintBottom_toTopOf="@+id/modify_firestore_entry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

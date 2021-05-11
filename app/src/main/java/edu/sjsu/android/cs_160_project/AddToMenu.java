@@ -77,7 +77,7 @@ public class AddToMenu extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_to_menu, container, false);
 
 
-        add = view.findViewById(R.id.add_to_firestore);
+        add = view.findViewById(R.id.modify_firestore_entry);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +142,7 @@ public class AddToMenu extends Fragment {
 
 
                 Navigation.findNavController(v).navigate(R.id.restaurant_menu);
+                Toast.makeText(getActivity(), "Done!", Toast.LENGTH_SHORT);
 //                Fragment fragment = new restaurant_menu();
 //                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

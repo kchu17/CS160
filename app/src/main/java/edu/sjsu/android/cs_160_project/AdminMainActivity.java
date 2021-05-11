@@ -16,6 +16,10 @@ public class AdminMainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private NavController navController;
     private MenuEntry entry;
+    private int position;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +30,13 @@ public class AdminMainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
     }
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
     public void setEntry(MenuEntry inputEntry)
     {
         this.entry = inputEntry;
@@ -34,4 +45,5 @@ public class AdminMainActivity extends AppCompatActivity {
     {
         return entry;
     }
+
 }
