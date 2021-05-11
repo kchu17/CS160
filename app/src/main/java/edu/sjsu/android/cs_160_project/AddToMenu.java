@@ -87,11 +87,41 @@ public class AddToMenu extends Fragment {
                 EditText editPrice = view.findViewById(R.id.editPrice);
                 EditText imageURL = view.findViewById(R.id.editURL);
                 Switch switchShow = view.findViewById(R.id.switchShow);
-                String name = editTitle.getText().toString();
-                String description = editDescription.getText().toString();
-                String image_url = imageURL.getText().toString();
-                double price = Double.parseDouble(editPrice.getText().toString());
+                String name = editTitle.getText().toString().trim();
+                String description = editDescription.getText().toString().trim();
+                String image_url = imageURL.getText().toString().trim();
+                double price = 0;
+                if (!editPrice.getText().toString().trim().isEmpty())
+                    price = Double.parseDouble(editPrice.getText().toString().trim());
                 boolean show = switchShow.isChecked();
+                if (name.isEmpty())
+                {
+                    editTitle.setError("Title is required!");
+                    editTitle.requestFocus();
+                    return;
+                }
+                if (description.isEmpty())
+                {
+                    editDescription.setError("Description is required!");
+                    editDescription.requestFocus();
+                    return;
+                }
+                if (image_url.isEmpty())
+                {
+                    editTitle.setError("Image url is required!");
+                    editTitle.requestFocus();
+                    return;
+                }
+                if (Double.toString(price).isEmpty())
+                {
+                    editTitle.setError("Price cannot be empty!");
+                    editTitle.requestFocus();
+                    return;
+                } else if (price < 0) {
+                    editTitle.setError("Price cannot be negative!");
+                    editTitle.requestFocus();
+                    return;
+                }
                 MenuEntry newEntry = new MenuEntry(name, description, price, image_url, show);
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();

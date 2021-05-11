@@ -1,6 +1,7 @@
 package edu.sjsu.android.cs_160_project;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +68,11 @@ public class HelperAdapter extends RecyclerView.Adapter {
         viewHolderClass.modify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.addToMenu);
+
+                AdminMainActivity activity = (AdminMainActivity) context;
+                activity.setEntry(menu.get(position));
+
+                Navigation.findNavController(v).navigate(R.id.modify_entry);
             }
         });
 
