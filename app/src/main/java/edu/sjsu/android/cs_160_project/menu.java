@@ -112,8 +112,14 @@ public class menu extends Fragment implements MenuAdapter.onCartMenuListener {
             menu = new ArrayList<MenuEntry>();
         }
 
-        onRowClick(0);
         setUpRecyclerView(view);
+
+        if (activity.getTableNumber() == -1)
+        {
+            onRowClick();
+        }
+
+
 /*
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -147,8 +153,8 @@ public class menu extends Fragment implements MenuAdapter.onCartMenuListener {
         mRecyclerView.setAdapter(adapter);
     }
 
-    public void onRowClick(int position) {
-        Toast.makeText(getActivity(), "You clicked row #" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+    public void onRowClick() {
+
 
         // setting up dialog
         final Dialog dialog = new Dialog(getActivity());

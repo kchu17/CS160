@@ -93,7 +93,7 @@ public class adminOrders extends Fragment {
 
         AdminMainActivity activity = (AdminMainActivity) getActivity();
         Query query = db.collection("restaurants").document(activity.getRestaurantID())
-                .collection("Orders") .orderBy("orderStatus").whereNotEqualTo("orderStatus", 12);
+                .collection("Orders") .orderBy("orderStatus");
 
 
         // Recycler Options

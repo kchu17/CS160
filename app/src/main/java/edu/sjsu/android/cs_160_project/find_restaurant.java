@@ -100,9 +100,11 @@ public class find_restaurant extends Fragment  {
                              Bundle savedInstanceState)
     {
 
-
+        MainActivity activity = (MainActivity) getActivity();
         menus = new ArrayList<ArrayList<MenuEntry>>();
         documentIds = new ArrayList<>();
+        //        activity.resetValues();
+
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_find_restaurant, container, false);
@@ -143,13 +145,35 @@ public class find_restaurant extends Fragment  {
                     documentIds.add("");
                 }
 
-
-                Glide.with(getContext()).load(Uri.parse(model.getImageUri())).into(holder.restaurantImage);
+                if(model.getImageUri() != null)
+                {
+                    Glide.with(getContext()).load(Uri.parse(model.getImageUri())).into(holder.restaurantImage);
+                }
 
 
 
             }
+
+
         };
+
+        if  (activity.getUsedQRCode())
+        {
+            activity.setQrCode(false);
+            String temp = activity.getRestaurantId();
+
+            for (int i =0; i < menus.size(); i++)
+            {
+                if (temp.equals(documentIds.get(i)))
+                {
+                    activity.setMenu(menus.get(i));
+                    final NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.menu);
+                    break;
+                }
+            }
+
+        }
 
 
         recyclerView.setHasFixedSize(true);

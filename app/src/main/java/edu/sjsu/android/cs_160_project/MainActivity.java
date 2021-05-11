@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "OnMainActivity";
+    public static final int QR_REQUEST = 100;
+
     private BottomNavigationView bottomNavigationView;
     private NavController navController;
     private ArrayList<MenuEntry> menu = null;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private OrderModel orderTracker;
     private String user_name;
     private String user_email;
+    private boolean usedQrCode;
 
     //private OrderModel orders = null;
     @Override
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         orderTracker = new OrderModel(new ArrayList<MenuEntry>(), -1, user_name, user_email, "", "$0.0");
         Log.d(TAG, "onCreate: created Order tracker");
+        usedQrCode = false;
 
 
 
@@ -80,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
     {
         orderTracker.setTableNumber(tableNumber);
         Log.d(TAG, "setTableNumber: set table number to: " + tableNumber);
+    }
+    public int getTableNumber()
+    {
+        return orderTracker.getTableNumber();
     }
     public void setMenu(ArrayList<MenuEntry> inputMenu)
     {
@@ -119,6 +128,49 @@ public class MainActivity extends AppCompatActivity {
 
     public void startQrCodeScanner()
     {
-        startActivity(new Intent(MainActivity.this, QrCodeScanner.class));
+        startActivityForResult(new Intent(MainActivity.this, QrCodeScanner.class), QR_REQUEST);
+    }
+
+    public boolean getUsedQRCode()
+    {
+        return usedQrCode;
+    }
+    public void setQrCode(boolean usedQrCode)
+    {
+        this.usedQrCode = usedQrCode;
+    }
+    public void resetValues()
+    {
+        orderTracker.setTableNumber(-1);
+        orderTracker.setOrders(new ArrayList<MenuEntry>());
+        orderTracker.setRestaurantID("");
+    }
+    // getting results back from the activities
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == QR_REQUEST) {
+            if (resultCode == RESULT_OK) {  // could be RESULT_OK, RESULT_CANCELLED, RESULT_FIRST_USER (for defining your own result codes)
+
+                Bundle extra = data.getExtras();
+
+                if (extra != null)
+                {
+                    String restaurantID = extra.getString(QrCodeScanner.ID_REPLY);
+                    int tableNumber = extra.getInt(QrCodeScanner.TABLE_REPLY);
+
+                    setRestaurantId(restaurantID);
+                    setTableNumber(tableNumber);
+                    usedQrCode = true;
+                    Log.d(TAG, "onActivityResult: Set restaurant ID to " + restaurantID + " table number to: " + tableNumber);
+
+
+
+                }
+
+            }
+        }
     }
 }

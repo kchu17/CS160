@@ -7,8 +7,10 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,6 +28,9 @@ import java.io.IOException;
 public class QrCodeScanner extends AppCompatActivity {
 
     public static final int CAMERA_PERMISSION_CODE = 100;
+    public static final String ID_REPLY = "edu.sjsu.android.cs_160_project.id";
+    public static final String TABLE_REPLY = "edu.sjsu.android.cs_160_project.table";
+    public static final String TAG = "onQrCode";
 
     private SurfaceView surfaceView;
     private CameraSource cameraSource;
@@ -37,6 +42,7 @@ public class QrCodeScanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code_scanner);
 
+        // asking for permission to use the camera
         checkPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
         surfaceView = findViewById(R.id.camera);
         text = findViewById(R.id.textResult);
@@ -84,7 +90,29 @@ public class QrCodeScanner extends AppCompatActivity {
                     text.post(new Runnable() {
                         @Override
                         public void run() {
+
                             text.setText(qrcode.valueAt(0).displayValue);
+                            String[] splitted = qrcode.valueAt(0).displayValue.split(",");
+                            String restaurantID;
+                            int tableNumber;
+                            if (splitted.length == 2)
+                            {
+                                restaurantID = splitted[0];
+                                tableNumber = Integer.parseInt(splitted[1]);
+
+                                Log.d(TAG, "run: ID: " + restaurantID  + " Table: " + tableNumber);
+                                Intent intent = new Intent();
+                                Bundle extras = new Bundle();
+
+                                extras.putString(ID_REPLY, restaurantID);
+                                extras.putInt(TABLE_REPLY, tableNumber);
+
+                                intent.putExtras(extras);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
+
+
                         }
                     });
                 }

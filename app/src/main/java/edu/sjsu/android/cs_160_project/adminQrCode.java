@@ -88,7 +88,7 @@ public class adminQrCode extends Fragment {
                 try{
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     AdminMainActivity activity = (AdminMainActivity) getActivity();
-                    String qrCodeText  = "" + activity.getRestaurantID() + ", " + qrTableNumber.getText().toString().trim();
+                    String qrCodeText  = "" + activity.getRestaurantID() + "," + qrTableNumber.getText().toString().trim();
                     Bitmap bitmap = barcodeEncoder.encodeBitmap(qrCodeText, BarcodeFormat.QR_CODE, 400, 400);
                     qrCodeImageView.setImageBitmap(bitmap);
                     Log.d(TAG, "onCreateView: Created QR CODE!");
