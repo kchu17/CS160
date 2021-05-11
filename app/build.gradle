@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "edu.sjsu.android.cs_160_project"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"

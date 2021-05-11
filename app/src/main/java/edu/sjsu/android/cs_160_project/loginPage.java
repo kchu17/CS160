@@ -66,7 +66,7 @@ public class loginPage extends AppCompatActivity {
     }
 
 
-/*
+
     @Override
     public void onStart() {
         super.onStart();
@@ -79,7 +79,7 @@ public class loginPage extends AppCompatActivity {
             start_correct_activity(mAuth.getUid());
         }
     }
-*/
+
 
     private void start_correct_activity(String id)
     {

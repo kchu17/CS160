@@ -9,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
@@ -32,6 +35,9 @@ public class adminQrCode extends Fragment {
 
     private final static String TAG = "OnAdminQRCode";
     private ImageView qrCodeImageView;
+    private EditText qrTableNumber;
+    private Button generateBtn;
+    private Button saveBtn;
     public adminQrCode() {
         // Required empty public constructor
     }
@@ -70,18 +76,36 @@ public class adminQrCode extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_admin_qr_code, container, false);
         
         qrCodeImageView = view.findViewById(R.id.qrCodeImageView);
+        qrTableNumber = view.findViewById(R.id.qrTableNumber);
+        generateBtn = view.findViewById(R.id.generateBtn);
+        saveBtn = view.findViewById(R.id.saveBtn);
+
+
+        qrCodeImageView.setImageResource(R.drawable.image_placeholder);
+        generateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                    AdminMainActivity activity = (AdminMainActivity) getActivity();
+                    String qrCodeText  = "" + activity.getRestaurantID() + ", " + qrTableNumber.getText().toString().trim();
+                    Bitmap bitmap = barcodeEncoder.encodeBitmap(qrCodeText, BarcodeFormat.QR_CODE, 400, 400);
+                    qrCodeImageView.setImageBitmap(bitmap);
+                    Log.d(TAG, "onCreateView: Created QR CODE!");
+                }
+                catch (Exception e)
+                {
+                    Log.d(TAG, "onCreateView: failed to create QR code");
+                    Toast.makeText(getActivity(), "Failed to create QR code", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+
+
         
-        try{
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.encodeBitmap("Restaurant", BarcodeFormat.QR_CODE, 400, 400);
-            qrCodeImageView.setImageBitmap(bitmap);
-            Log.d(TAG, "onCreateView: Created QR CODE!");
-        }
-        catch (Exception e)
-        {
-            Log.d(TAG, "onCreateView: failed to create QR code");
-            
-        }
+
         
         return view;
     }
