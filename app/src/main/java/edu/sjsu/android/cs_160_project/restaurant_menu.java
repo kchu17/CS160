@@ -54,7 +54,7 @@ public class restaurant_menu extends Fragment {
                     Restaurant temp = Objects.requireNonNull(task.getResult()).toObject(Restaurant.class);
                     assert temp != null;
                     menu = temp.getMenu();
-                    Log.d("testing", "On Complete: name: " + menu.get(0).getName() + "price: " + menu.get(0).getPrice());
+                   // Log.d("testing", "On Complete: name: " + menu.get(0).getName() + "price: " + menu.get(0).getPrice());
                     RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
                     HelperAdapter helperAdapter = new HelperAdapter(menu, getContext());
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

@@ -18,7 +18,6 @@ public class Restaurant {
     private String restaurantAddress;
     private double longitude;
     private double latitude;
-
     ArrayList<MenuEntry> menu;
 
     public Restaurant(String input_name, String input_type, double input_rating, String input_imageUri,  ArrayList<MenuEntry> input_menu)

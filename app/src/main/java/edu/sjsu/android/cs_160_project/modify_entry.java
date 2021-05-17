@@ -133,8 +133,19 @@ public class modify_entry extends Fragment {
                 }
                 MenuEntry newEntry = new MenuEntry(name, description, price, image_url, show);
 
+
+                AdminMainActivity activity = (AdminMainActivity)getActivity();
+                String documentId;
+                if (activity.getRestaurantID() == null)
+                {
+                    documentId = "38LjguRoduFlv7Ne7sWn";
+                }
+                else
+                {
+                    documentId = activity.getRestaurantID();
+                }
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference ref = db.collection("restaurants").document("38LjguRoduFlv7Ne7sWn");
+                DocumentReference ref = db.collection("restaurants").document(documentId);
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -160,8 +171,20 @@ public class modify_entry extends Fragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                AdminMainActivity activity = (AdminMainActivity)getActivity();
+                String documentId;
+                if (activity.getRestaurantID() == null)
+                {
+                    documentId = "38LjguRoduFlv7Ne7sWn";
+                }
+                else
+                {
+                    documentId = activity.getRestaurantID();
+                }
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference ref = db.collection("restaurants").document("38LjguRoduFlv7Ne7sWn");
+                DocumentReference ref = db.collection("restaurants").document(documentId);
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {

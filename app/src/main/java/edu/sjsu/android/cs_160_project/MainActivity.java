@@ -10,6 +10,8 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -63,6 +65,29 @@ public class MainActivity extends AppCompatActivity {
         usedQrCode = false;
 
 
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.user_top_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.mainActivityLogout:
+                startActivity(new Intent(MainActivity.this, loginPage.class));
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 
@@ -165,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
                     setTableNumber(tableNumber);
                     usedQrCode = true;
                     Log.d(TAG, "onActivityResult: Set restaurant ID to " + restaurantID + " table number to: " + tableNumber);
+
+
 
 
 

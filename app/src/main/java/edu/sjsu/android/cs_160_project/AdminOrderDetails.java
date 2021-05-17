@@ -111,7 +111,7 @@ public class AdminOrderDetails extends AppCompatActivity implements AdapterView.
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString().trim();
 
-        Toast.makeText(this, "Option selected = " + text, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Option selected = " + text, Toast.LENGTH_SHORT).show();
         if (text.equals("Done"))
         {
             orderRepresentation.setOrderStatus(OrderStatus.DONE);
@@ -125,7 +125,7 @@ public class AdminOrderDetails extends AppCompatActivity implements AdapterView.
             orderRepresentation.setOrderStatus(OrderStatus.ORDERED);
         }
 
-        Toast.makeText(this, "Current Status = " + orderRepresentation.getOrderStatus(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Current Status = " + orderRepresentation.getOrderStatus(), Toast.LENGTH_SHORT).show();
 
 
     }

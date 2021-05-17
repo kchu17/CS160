@@ -100,6 +100,7 @@ public class find_restaurant extends Fragment  {
                              Bundle savedInstanceState)
     {
 
+        Log.d("QRDEBUG", "onCreateView: on create again");
         MainActivity activity = (MainActivity) getActivity();
         menus = new ArrayList<ArrayList<MenuEntry>>();
         documentIds = new ArrayList<>();
@@ -152,28 +153,15 @@ public class find_restaurant extends Fragment  {
 
 
 
+
+
+
             }
 
 
         };
 
-        if  (activity.getUsedQRCode())
-        {
-            activity.setQrCode(false);
-            String temp = activity.getRestaurantId();
 
-            for (int i =0; i < menus.size(); i++)
-            {
-                if (temp.equals(documentIds.get(i)))
-                {
-                    activity.setMenu(menus.get(i));
-                    final NavController navController = Navigation.findNavController(view);
-                    navController.navigate(R.id.menu);
-                    break;
-                }
-            }
-
-        }
 
 
         recyclerView.setHasFixedSize(true);
@@ -198,15 +186,17 @@ public class find_restaurant extends Fragment  {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
         adapter.startListening(); // will listen for any new files added.
+
+
     }
-
-
 
 
 
@@ -230,10 +220,35 @@ public class find_restaurant extends Fragment  {
                 @Override
                 public void onClick(View v) {
 
+                    /*
+                    Log.d("QRDEBUG", "onCreateView: before QR Code");
+                    MainActivity activity = (MainActivity) getActivity();
+                    if  (activity.getUsedQRCode())
+                    {
+                        Log.d("QRDEBUG", "onCreateView: recieved QR code");
+                        activity.setQrCode(false);
+                        String temp = activity.getRestaurantId();
+
+                        for (int i =0; i < menus.size(); i++)
+                        {
+                            if (temp.equals(documentIds.get(i)))
+                            {
+                                activity.setMenu(menus.get(i));
+                                final NavController navController = Navigation.findNavController(v);
+                                navController.navigate(R.id.menu);
+                                break;
+                            }
+                        }
+
+                    }
+                    */
+
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION)
                     {
-                        Toast.makeText(getActivity(), "Clicked row # " + getAdapterPosition() , Toast.LENGTH_SHORT).show();
+
+
+                        //Toast.makeText(getActivity(), "Clicked row # " + getAdapterPosition() , Toast.LENGTH_SHORT).show();
 
 
 

@@ -9,6 +9,9 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -70,6 +73,26 @@ public class AdminMainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_tope_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.adminMainActivitySingOut:
+                startActivity(new Intent(AdminMainActivity.this, loginPage.class));
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public String getRestaurantID(){
         Log.d(TAG, "getRestaurantID: called ");

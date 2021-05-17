@@ -3,15 +3,9 @@ package edu.sjsu.android.cs_160_project;
 public class User {
     private String fullName;
     private String email;
-    private int type;
     private String restaurantID;
+    private int type;
 
-    public User(String name, String email)
-    {
-        this.fullName = name;
-        this.email = email;
-
-    }
 
     public User(String name, String email, int type, String restaurantID)
     {
@@ -21,10 +15,12 @@ public class User {
         this.restaurantID = restaurantID;
     }
 
-    public User()  // for firebase
+    public User()  // needed to load information back from cloud database
     {
 
     }
+
+    // Getters and Setters
     public int getType() {
         return type;
     }
